@@ -34,7 +34,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: config.NODE_ENV === "production",
+      secure: true,
       maxAge: 24 * 60 * 60 * 1000,
       sameSite: "lax",
     },
@@ -54,10 +54,10 @@ app.use(
 app.get(
   `/`,
   asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    throw new BadRequestException(
-      "This is a bad request",
-      ErrorCodeEnum.AUTH_INVALID_TOKEN
-    );
+    // throw new BadRequestException(
+    //   "This is a bad request",
+    //   ErrorCodeEnum.AUTH_INVALID_TOKEN
+    // );
     return res.status(HTTPSTATUS.OK).json({
       message: "Hello Subscribe to the channel & share",
     });
