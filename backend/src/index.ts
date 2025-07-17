@@ -24,19 +24,27 @@ const app = express();
 const BASE_PATH = config.BASE_PATH;
 
 app.use(express.json());
-
+app.set("trust proxy", 1); // CRITICAL on Render!
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
+  cors({
+    origin: "https://team-sync-three.vercel.app",
+    credentials: true,
+  })
+);
+
+app.use(
   session({
+    name: "sessionId",
     secret: config.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
       secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
       sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
     },
   })
 );
@@ -44,12 +52,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(
-  cors({
-    origin: config.FRONTEND_ORIGIN,
-    credentials: true,
-  })
-);
 
 app.get(
   `/`,
